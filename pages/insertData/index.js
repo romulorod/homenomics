@@ -1,13 +1,19 @@
 import React, { useState } from 'react'
 import CategorySelect from '../../components/CategorySelect/CategorySelect'
-import { arrayUnion, doc, setDoc } from 'firebase/firestore'
+import { arrayUnion, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../firebase/initFirebase'
 import { toast } from 'react-toastify'
 import SelectMonth from '../../components/SelectMonth/SelectMonth'
+import Link from 'next/link'
+import Nav from '../../components/Nav'
+
 export default function InsertData() {
-  const [month, setMonth] = useState('jan')
+  const [month, setMonth] = useState('')
   const [expenseType, setExpenseType] = useState('')
   const [category, setCategory] = useState('')
+  const [newCategory, setNewCategory] = useState('')
+  const [value, setValue] = useState(0)
+
   const toastParameters = {
     position: 'top-right',
     autoClose: 5000,
@@ -23,12 +29,13 @@ export default function InsertData() {
   const createCategory = async () => {
     if (!expenseType)
       return toast.error('Você precisa selecionar o tipo de categoria', toastParameters)
-    if (!category) return toast.error('Você precisa escrever o nome da categoria', toastParameters)
+    if (!newCategory)
+      return toast.error('Você precisa escrever o nome da categoria', toastParameters)
     try {
       await setDoc(
         doc(db, 'expenseTypes', expenseType),
         {
-          categories: arrayUnion(category),
+          categories: arrayUnion(newCategory),
         },
         { merge: true }
       )
@@ -38,8 +45,34 @@ export default function InsertData() {
       toast.error('Não foi possível criar sua categoria')
     }
   }
+  const saveExpense = async () => {
+    if (!month) return toast.error('O mês não foi selecionado')
+    if (!category) return toast.error('A categoria não foi selecionada')
+    if (!value) return toast.error('Você esqueceu de digitar o valor')
+    if (!expenseType) return toast.error('Qual é o tipo de despesa?')
+    const expensesRef = doc(db, 'expenses', month)
+    const data = {
+      [expenseType]: arrayUnion({
+        month,
+        expenseType,
+        category,
+        value,
+      }),
+    }
+    try {
+      const docSnap = await getDoc(expensesRef)
+      if (docSnap.exists()) {
+        await updateDoc(doc(db, 'expenses', month), data)
+      } else {
+        await setDoc(doc(db, 'expenses', month), data)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className="flex items-center justify-center flex-col">
+      <Nav buttonClass={buttonClass} month={month} />
       <h2>Escolha o tipo de despesa</h2>
       <section className="flex m-4 items-center flex-wrap justify-evenly">
         <div>
@@ -81,24 +114,27 @@ export default function InsertData() {
       <br />
       <section>
         <h2>Escolha a categoria</h2>
-        <CategorySelect expenseType={expenseType} />
+        <CategorySelect expenseType={expenseType} setCategory={setCategory} />
       </section>
       <section>
         <h2>Insira o valor</h2>
         <input
-          className="bg-slate-300 p-2 border rounded-lg placeholder:text-black"
-          type="text"
-          placeholder="250,78"
+          className="bg-slate-300 p-2 border rounded-lg placeholder:text-grey"
+          type="number"
+          placeholder="250.78"
+          onChange={(e) => setValue(parseFloat(e.target.value))}
         />
       </section>
-      <button className={buttonClass}>Salvar despesa</button>
+      <button className={buttonClass} onClick={() => saveExpense()}>
+        Salvar despesa
+      </button>
       <div className="flex items-center justify-center mt-24">
         <section className="">
           <input
-            className="bg-slate-300 p-2 border rounded-lg placeholder:text-black"
+            className="bg-slate-300 p-2 border rounded-lg placeholder:text-grey"
             type="text"
             placeholder="Criar nova categoria"
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => setNewCategory(e.target.value)}
           />
           <button className={`${buttonClass}`} onClick={() => createCategory()}>
             Criar categoria
