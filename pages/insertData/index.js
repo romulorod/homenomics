@@ -8,7 +8,6 @@ export default function InsertData() {
   const [month, setMonth] = useState('jan')
   const [expenseType, setExpenseType] = useState('')
   const [category, setCategory] = useState('')
-  const [showCreate, setShowCreate] = useState(false)
   const toastParameters = {
     position: 'top-right',
     autoClose: 5000,
@@ -33,8 +32,10 @@ export default function InsertData() {
         },
         { merge: true }
       )
+      toast.success('Categoria criada com sucesso')
     } catch (error) {
       console.log(error)
+      toast.error('Não foi possível criar sua categoria')
     }
   }
   return (
@@ -97,7 +98,6 @@ export default function InsertData() {
             className="bg-slate-300 p-2 border rounded-lg placeholder:text-black"
             type="text"
             placeholder="Criar nova categoria"
-            disabled={!expenseType}
             onChange={(e) => setCategory(e.target.value)}
           />
           <button className={`${buttonClass}`} onClick={() => createCategory()}>
