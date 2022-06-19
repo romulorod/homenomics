@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { db } from '../../firebase/initFirebase'
 import { doc, getDoc } from 'firebase/firestore'
 
-export default function CategorySelect({ expenseType }) {
+export default function CategorySelect({ expenseType, setCategory }) {
   const [categories, setCategories] = useState([])
   useEffect(() => {
     async function getCategories() {
@@ -20,7 +20,7 @@ export default function CategorySelect({ expenseType }) {
     getCategories()
   }, [expenseType, categories])
   return (
-    <select data-testid="select-category">
+    <select data-testid="select-category" onChange={(e) => setCategory(e.target.value)}>
       <option data-testid="select-option">Selecione a categoria</option>
       {categories.map((category) => (
         <option key={category} data-testid="select-option" value={category}>
