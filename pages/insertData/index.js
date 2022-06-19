@@ -25,42 +25,53 @@ export default function InsertData() {
     if (!expenseType)
       return toast.error('Você precisa selecionar o tipo de categoria', toastParameters)
     if (!category) return toast.error('Você precisa escrever o nome da categoria', toastParameters)
-    await setDoc(
-      doc(db, 'expenseTypes', expenseType),
-      {
-        categories: arrayUnion(category),
-      },
-      { merge: true }
-    )
+    try {
+      await setDoc(
+        doc(db, 'expenseTypes', expenseType),
+        {
+          categories: arrayUnion(category),
+        },
+        { merge: true }
+      )
+    } catch (error) {
+      console.log(error)
+    }
   }
   return (
-    <div>
+    <div className="flex items-center justify-center flex-col">
       <h2>Escolha o tipo de despesa</h2>
-      <section className="flex ">
-        <button
-          className={buttonClass}
-          onClick={() => setExpenseType('basic')}
-          data-testid="basic-expenses"
-          disabled={expenseType === 'basic'}
-        >
-          Despesas Básicas
-        </button>
-        <button
-          className={buttonClass}
-          onClick={() => setExpenseType('superfluous')}
-          data-testid="superfluous-expenses"
-          disabled={expenseType === 'superfluous'}
-        >
-          Despesas Supérfluas
-        </button>
-        <button
-          className={buttonClass}
-          onClick={() => setExpenseType('investments')}
-          data-testid="investments"
-          disabled={expenseType === 'investments'}
-        >
-          Investimentos
-        </button>
+      <section className="flex m-4 items-center flex-wrap justify-evenly">
+        <div>
+          <input
+            type="radio"
+            name="expense-type"
+            data-testid="basic-expenses"
+            value="basic"
+            onClick={(e) => setExpenseType(e.target.value)}
+          />
+          <label className="ml-1">Despesas Básicas</label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            name="expense-type"
+            data-testid="superfluous-expenses"
+            value="superfluous"
+            onClick={(e) => setExpenseType(e.target.value)}
+          />
+
+          <label className="ml-1">Despesas Supérfluas</label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            name="expense-type"
+            data-testid="investments"
+            value="investments"
+            onClick={(e) => setExpenseType(e.target.value)}
+          />
+          <label className="ml-1">Investimentos</label>
+        </div>
       </section>
       <section>
         <h2>Escolha o mês</h2>
@@ -80,7 +91,7 @@ export default function InsertData() {
         />
       </section>
       <button className={buttonClass}>Salvar despesa</button>
-      <div className="absolute w-full" style={{ top: '90vh', left: '10%' }}>
+      <div className="flex items-center justify-center mt-24">
         <section className="">
           <input
             className="bg-slate-300 p-2 border rounded-lg placeholder:text-black"
