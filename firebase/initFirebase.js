@@ -6,12 +6,12 @@ import { getFirestore } from 'firebase/firestore'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyAa7tsBW_7UVkwIT_u4Izr5TuJGxjxlujA',
-  authDomain: 'homenomics-a7d72.firebaseapp.com',
-  projectId: 'homenomics-a7d72',
-  storageBucket: 'homenomics-a7d72.appspot.com',
-  messagingSenderId: '577257313857',
-  appId: '1:577257313857:web:8c164fd35b68783be098c0',
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.PROJECT_ID + '.firebaseapp.com',
+  projectId: process.env.PROJECT_ID,
+  storageBucket: process.env.PROJECT_ID + '.appspot.com',
+  messagingSenderId: process.env.MSG_SENDER_ID,
+  appId: process.env.APP_ID,
 }
 
 // Initialize Firebase
