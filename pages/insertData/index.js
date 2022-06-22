@@ -4,7 +4,6 @@ import { arrayUnion, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import { db } from '../../firebase/initFirebase'
 import { toast } from 'react-toastify'
 import SelectMonth from '../../components/SelectMonth/SelectMonth'
-import Link from 'next/link'
 import Nav from '../../components/Nav'
 
 export default function InsertData() {
