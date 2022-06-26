@@ -1,6 +1,4 @@
-import { getSortedRoutes } from 'next/dist/shared/lib/router/utils'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import React from 'react'
 
 export default function StartButton() {
