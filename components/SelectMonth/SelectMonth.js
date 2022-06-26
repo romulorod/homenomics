@@ -2,18 +2,18 @@ import React from 'react'
 
 export default function SelectMonth({ month, setMonth }) {
   const months = [
-    'Janeiro',
-    'Fevereiro',
-    'Março',
-    'Abril',
-    'Maio',
-    'Junho',
-    'Julho',
-    'Agosto',
-    'Setembro',
-    'Outubro',
-    'Novembro',
-    'Dezembro',
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ]
   return (
     <select data-testid="select" value={month} onChange={(e) => setMonth(e.target.value)}>
