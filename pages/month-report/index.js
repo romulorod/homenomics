@@ -1,28 +1,45 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend, Tooltip } from 'recharts'
+import { getData, totalExpensesByType } from '../../lib/getMonthReport'
+import Nav from '../../components/Nav'
 
-export default function MonthReport() {
-  const data = [
-    { name: 'Mercado', Básicos: 30, Supérfluo: 70 },
-    { name: 'Luz', Básicos: 12, Supérfluo: 88 },
-    { name: 'Gás', Básicos: 15, Supérfluo: 85 },
-    { name: 'Aluguel', Básicos: 35, Supérfluo: 65 },
-    { name: 'Restaurantes', Básicos: 54, Supérfluo: 46 },
-    //{ name: 'F', Básicos: 72, Supérfluo: 28 },
-    //{ name: 'G', Básicos: 32, Supérfluo: 68 },
-  ]
-  return (
-    <>
-      <main>{new Date().toLocaleString('default', { month: 'long' })}</main>
+export default function MonthReportTest() {
+  const [data, setData] = useState()
+  const [total, setTotal] = useState({})
+  useEffect(() => {
+    async function fetchData() {
+      setData(await getData())
+      setTotal(await totalExpensesByType())
+    }
+    fetchData()
+  }, [renderGraph])
+  const buttonClass =
+    'bg-blue-500 hover:bg-blue-700 text-sm m-4 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline'
+  const renderGraph = useCallback(() => {
+    return (
       <BarChart width={500} height={500} data={data}>
         <CartesianGrid />
         <XAxis dataKey="name" />
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="Básicos" stackId="a" fill="purple" />
-        <Bar dataKey="Supérfluo" stackId="a" fill="green" />
+        <Bar dataKey="Básico" stackId="a" fill="green" />
+        <Bar dataKey="Supérfluo" stackId="a" fill="darkred" />
       </BarChart>
+    )
+  }, [data])
+  return (
+    <>
+      <Nav buttonClass={buttonClass} />
+      <main>{new Date().toLocaleString('default', { month: 'long' })}</main>
+      <br />
+      {renderGraph()}
+      <br />
+      Total: {total.basic + total.superfluous}
+      <br />
+      Básico: {total.basic}
+      <br />
+      Supérfluo: {total.superfluous}
     </>
   )
 }
