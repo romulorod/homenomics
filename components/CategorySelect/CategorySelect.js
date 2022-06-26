@@ -21,7 +21,9 @@ export default function CategorySelect({ expenseType, setCategory }) {
   }, [expenseType, categories])
   return (
     <select data-testid="select-category" onChange={(e) => setCategory(e.target.value)}>
-      <option data-testid="select-option">Selecione a categoria</option>
+      <option data-testid="select-option" value="">
+        Selecione a categoria
+      </option>
       {categories.map((category) => (
         <option key={category} data-testid="select-option" value={category}>
           {category}

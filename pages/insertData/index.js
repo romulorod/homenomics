@@ -30,11 +30,12 @@ export default function InsertData() {
       return toast.error('Você precisa selecionar o tipo de categoria', toastParameters)
     if (!newCategory)
       return toast.error('Você precisa escrever o nome da categoria', toastParameters)
+    const capitalizedCategory = newCategory.charAt(0).toUpperCase() + newCategory.slice(1)
     try {
       await setDoc(
         doc(db, 'expenseTypes', expenseType),
         {
-          categories: arrayUnion(newCategory),
+          categories: arrayUnion(capitalizedCategory),
         },
         { merge: true }
       )
