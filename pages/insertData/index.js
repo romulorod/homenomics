@@ -51,10 +51,9 @@ export default function InsertData() {
     if (!expenseType) return toast.error('Qual é o tipo de despesa?')
     const expensesRef = doc(db, 'expenses', month)
     const data = {
-      [expenseType]: arrayUnion({
+      [category]: arrayUnion({
         month,
         expenseType,
-        category,
         value,
       }),
     }
