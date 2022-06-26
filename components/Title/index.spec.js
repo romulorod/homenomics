@@ -1,6 +1,3 @@
-/**
- * @jest-environment jsdom
- */
 import { fireEvent, render, screen } from '@testing-library/react'
 import Title from './Title'
 import '@testing-library/jest-dom'
